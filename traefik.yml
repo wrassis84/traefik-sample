@@ -6,7 +6,7 @@ services:
     command:
       - "--providers.docker.endpoint=unix:///var/run/docker.sock"
       - "--providers.docker.swarmMode=true"
-      - "--providers.docker.exposebydefault=false"
+      - "--providers.docker.exposedbydefault=false"
       - "--providers.docker.network=traefik-public"
       - "--entrypoints.web.address=:80"
     ports:
