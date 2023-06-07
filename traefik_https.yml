@@ -9,11 +9,18 @@ services:
       - "--providers.docker.exposedbydefault=false"
       - "--providers.docker.network=traefik-public"
       - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+      - "--certificatesresolvers.letsencryptresolver.acme.httpchallenge=true"
+      - "--certificatesresolvers.letsencryptresolver.acme.httpchallenge.entrypoint=web"
+      - "--certificatesresolvers.letsencryptresolver.acme.email=jeferson@linuxtips.com.br"
+      - "--certificatesresolvers.letsencryptresolver.acme.storage=/letsencrypt/acme.json"
     ports:
       - 80:80
+      - 443:443
     volumes:
       # So that Traefik can listen to the Docker events:
       - /var/run/docker.sock:/var/run/docker.sock:ro
+      - traefik-certificates:/letsencrypt
     networks:
       # This network must be created before (in CLI) deploy this file:
       # $ docker network create --driver overlay traefik-public
@@ -23,7 +30,9 @@ services:
         constraints:
           - node.role == manager
 ###
+volumes:
+  traefik-certificates:
+###
 networks:
   traefik-public:
     external: true
-
